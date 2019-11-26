@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     #When true
     #replacing the (2nd) distance paramter with word to test for
-    result = automata.find_all_matches(target_word,"fooooooood",test_word = True)
+    result = automata.find_all_matches(target_word,"fooooooood",lookup_func = False,test_word = True)
     print("DONE")
 
     #NOTE: CHECK THIS OUT, FOR SOME REASON IT IS NOT EXECUTING

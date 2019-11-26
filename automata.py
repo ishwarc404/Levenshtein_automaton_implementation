@@ -22,6 +22,8 @@ def levenshtein_automata(term, k):
 
 
 def find_all_matches(word, k, lookup_func = False,test_word = False):
+
+    print(test_word)
     """Uses lookup_func to find all words within levenshtein distance k of word.
 
     Args:
@@ -41,27 +43,31 @@ def find_all_matches(word, k, lookup_func = False,test_word = False):
         length = len(k)
         print("[INFO]: Testing the word {}".format(k))
         return
-
-
-    if(test_word == False):
-        #convert the word into lowercase
-        word = word.lower()
         
+    else:
+        print("HMMMMM")
+        word = word.lower()
+        print("WORD IS",word)
         lev = levenshtein_automata(word, k).to_dfa()
         match = lev.next_valid_string(u'\0')
         words_match = []
-        while match:
-            next = lookup_func(match)
-            if not next:
-                return
-            if match == next:
-                #saving all the words at the edit distance
-                words_match.append(next)
-                yield match
-                next = next + u'\0'
-            match = lev.next_valid_string(next)
 
-        return words_match
+        #ADITYA AND MITHALI
+        #IF I UNCOMMENT THE NEXT LINES, THE IF CASE STOPS WORKING FOR SOME BLOODY REASON
+        # while match:
+        #     next = lookup_func(match)
+        #     if not next:
+        #         return
+        #     if match == next:
+        #         #saving all the words at the edit distance
+        #         words_match.append(next)
+        #         yield match
+        #         next = next + u'\0'
+        #     match = lev.next_valid_string(next)
+
+        # return words_match
+
+
 
 
 
