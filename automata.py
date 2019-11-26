@@ -21,7 +21,7 @@ def levenshtein_automata(term, k):
     return nfa
 
 
-def find_all_matches(word, k, lookup_func):
+def find_all_matches(word, k, lookup_func = False,test_word = False):
     """Uses lookup_func to find all words within levenshtein distance k of word.
 
     Args:
@@ -32,14 +32,46 @@ def find_all_matches(word, k, lookup_func):
     Yields:
       Every matching word within levenshtein distance k from the database.
     """
-    lev = levenshtein_automata(word, k).to_dfa()
-    match = lev.next_valid_string(u'\0')
-    while match:
-        next = lookup_func(match)
-        if not next:
-            return
-        if match == next:
-            print(next) #printing all the words at the edit distance
-            yield match
-            next = next + u'\0'
-        match = lev.next_valid_string(next)
+
+    print("[INFO]:In the automata function")
+    #if test_word = True
+    #we need to test a word
+    if(test_word == True):
+        #the word to be tested for is stored in k
+        length = len(k)
+        print("[INFO]: Testing the word {}".format(k))
+        return
+
+
+    if(test_word == False):
+        #convert the word into lowercase
+        word = word.lower()
+        
+        lev = levenshtein_automata(word, k).to_dfa()
+        match = lev.next_valid_string(u'\0')
+        words_match = []
+        while match:
+            next = lookup_func(match)
+            if not next:
+                return
+            if match == next:
+                #saving all the words at the edit distance
+                words_match.append(next)
+                yield match
+                next = next + u'\0'
+            match = lev.next_valid_string(next)
+
+        return words_match
+
+
+
+    
+
+
+
+
+
+        
+
+
+    

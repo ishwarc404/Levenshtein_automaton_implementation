@@ -1,19 +1,21 @@
-import unittest
+# import unittest
 import automata
 import bisect
 
 
+#official dictionary of words
 words = [x.strip().lower() for x in open('sowpods.txt')]
+#user inputted words #we will check the distance of these words from the user specified target word
 words = ["food","foid","foed","foeed","foeeed"]
 words.sort()
 
 
-class Tests(unittest.TestCase):
-    def test_food(self):
-        m = Matcher(words)
-        print("[INFO]: Number of words at edit distance:{} words".format(len((list(automata.find_all_matches('food', 2, m))))))
-        # self.assertEqual(len((list(automata.find_all_matches('food', 1, m)))), 1)
-        # self.assertEqual(len((list(automata.find_all_matches('food', 2, m)))), 2)
+# class Tests(unittest.TestCase):
+#     def test_main(self):
+#         # self.assertEqual(len((list(automata.find_all_matches('food', 1, m)))), 1)
+#         # self.assertEqual(len((list(automata.find_all_matches('food', 2, m)))), 2)
+#         #will edit this part later
+#         pass
 
 class Matcher(object):
     def __init__(self, l):
@@ -28,5 +30,24 @@ class Matcher(object):
         else:
             return None
 
+
 if __name__ == '__main__':
-    unittest.main()
+    #this is your main function
+    #we are calling everthing from here
+    m = Matcher(words)
+    target_word = "FOOD"
+    target_distance = 2
+
+    #When the 4th parameter is false, we are just checking which words are at an edited distance
+    #When true, we are going to check what are the minimum number of edits to make
+    result_words = automata.find_all_matches(target_word,target_distance,m,test_word = False)
+    print("[INFO]: The words at edit distance:{} ".format((list(result_words))))
+    print("DONE")
+
+
+    #When true
+    #replacing the (2nd) distance paramter with word to test for
+    result = automata.find_all_matches(target_word,"fooooooood",test_word = True)
+    print("DONE")
+
+    #NOTE: CHECK THIS OUT, FOR SOME REASON IT IS NOT EXECUTING
