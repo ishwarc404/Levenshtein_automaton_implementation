@@ -1,5 +1,19 @@
 from nfa import NFA
+import bisect
 
+
+class Matcher(object):
+    def __init__(self, l):
+        self.l = l
+        self.probes = 0
+
+    def __call__(self, w):
+        self.probes += 1
+        pos = bisect.bisect_left(self.l, w)
+        if pos < len(self.l):
+            return self.l[pos]
+        else:
+            return None
 
 def levenshtein_automata(term, k):
     nfa = NFA((0, 0))
@@ -21,11 +35,37 @@ def levenshtein_automata(term, k):
     return nfa
 
 
-def find_all_matches(word, k, lookup_func = False,test_word = False):
 
-    print(test_word)
+def find_minimum_edits(target_word, k,test_words):
+    #lookup function
+    lookup_func = Matcher(test_words)
+
+    target_word = target_word.lower()
+    lev = levenshtein_automata(target_word, k).to_dfa()
+    match = lev.next_valid_string(u'\0')
+    words_match = []
+    #ADITYA AND MITHALI
+    #IF I UNCOMMENT THE NEXT LINES, THE IF CASE STOPS WORKING FOR SOME BLOODY REASON
+    while match:
+        next = lookup_func(match)
+        if not next:
+            return
+        if match == next:
+            #saving all the words at the edit distance
+            words_match.append(next)
+            yield match
+            next = next + u'\0'
+        match = lev.next_valid_string(next)
+
+    return words_match
+
+
+
+
+def find_all_matches(target_word, k,test_words):
+
+
     """Uses lookup_func to find all words within levenshtein distance k of word.
-
     Args:
       word: The word to look up
       k: Maximum edit distance
@@ -35,37 +75,27 @@ def find_all_matches(word, k, lookup_func = False,test_word = False):
       Every matching word within levenshtein distance k from the database.
     """
 
-    print("[INFO]:In the automata function")
-    #if test_word = True
-    #we need to test a word
-    if(test_word == True):
-        #the word to be tested for is stored in k
-        length = len(k)
-        print("[INFO]: Testing the word {}".format(k))
-        return
-        
-    else:
-        print("HMMMMM")
-        word = word.lower()
-        print("WORD IS",word)
-        lev = levenshtein_automata(word, k).to_dfa()
-        match = lev.next_valid_string(u'\0')
-        words_match = []
+    #lookup function
+    lookup_func = Matcher(test_words)
 
-        #ADITYA AND MITHALI
-        #IF I UNCOMMENT THE NEXT LINES, THE IF CASE STOPS WORKING FOR SOME BLOODY REASON
-        # while match:
-        #     next = lookup_func(match)
-        #     if not next:
-        #         return
-        #     if match == next:
-        #         #saving all the words at the edit distance
-        #         words_match.append(next)
-        #         yield match
-        #         next = next + u'\0'
-        #     match = lev.next_valid_string(next)
+    target_word = target_word.lower()
+    lev = levenshtein_automata(target_word, k).to_dfa()
+    match = lev.next_valid_string(u'\0')
+    words_match = []
+    #ADITYA AND MITHALI
+    #IF I UNCOMMENT THE NEXT LINES, THE IF CASE STOPS WORKING FOR SOME BLOODY REASON
+    while match:
+        next = lookup_func(match)
+        if not next:
+            return
+        if match == next:
+            #saving all the words at the edit distance
+            words_match.append(next)
+            yield match
+            next = next + u'\0'
+        match = lev.next_valid_string(next)
 
-        # return words_match
+    return words_match
 
 
 
