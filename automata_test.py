@@ -11,7 +11,7 @@ test_words.sort()
 
 def find_minimum_edits(target_word,test_word):
     length = len(test_word)
-    print("[INFO]: Testing the word {}".format(test_word))
+    # print("[INFO]: Testing the word {}".format(test_word))
     test_words = [test_word]
     valid = []
     for i in range(0,length+1):
