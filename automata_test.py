@@ -40,7 +40,7 @@ if __name__ == '__main__':
     print("\n \n")
 
     print("[STAGE]:Finding minimum edit distance for a word")
-    test_word = "foooooooood"
+    test_word = "fod"
     result = find_minimum_edits(target_word,test_word)
     print("[INFO]: Minimum number of edits to be made to convert {} into {} is: {}".format(test_word,target_word,result))
     print("[INFO]: Stage Complete")
